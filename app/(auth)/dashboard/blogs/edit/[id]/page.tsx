@@ -43,15 +43,17 @@ export default function EditBlogPage({ params }: { params: { id: string } }) {
       if (!res?.data) throw new Error('Blog not found');
 
       const data = res.data;
-      setBlog(data);
+      // The blog data is nested under the 'blog' property in the response
+      const blogData = data.blog || data;
+      setBlog(blogData);
 
       setFormData({
-        title: data.title || '',
-        content: data.content || '',
-        excerpt: data.description || '',
-        featuredImage: data.image || '',
-        tags: data.tags || [],
-        published: data.published || false,
+        title: blogData.title || '',
+        content: blogData.content || '',
+        excerpt: blogData.excerpt || '',
+        featuredImage: blogData.featuredImage || '',
+        tags: blogData.tags || [],
+        published: blogData.published || false,
       });
     } catch (err) {
       toast.error(handleApiError(err));
@@ -275,7 +277,7 @@ export default function EditBlogPage({ params }: { params: { id: string } }) {
               disabled={isSubmitting}
               className={`
     min-w-[160px] 
-    bg-primary-600 
+    bg-green-600 
     hover:bg-primary-300 
     text-black 
     font-medium 

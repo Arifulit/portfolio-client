@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { projectAPI, handleApiError } from '@/lib/api';
 import { toast } from 'react-hot-toast';
+import { Project } from '@/types';
 
 interface ProjectFormData {
   title: string;
@@ -21,6 +22,7 @@ export default function EditProjectPage() {
   const params = useParams();
   const projectId = params.id as string;
 
+  const [project, setProject] = useState<Project | null>(null);
   const [formData, setFormData] = useState<ProjectFormData>({
     title: '',
     description: '',
@@ -47,18 +49,19 @@ export default function EditProjectPage() {
           throw new Error('Project not found');
         }
 
-        const project = response.data;
-        console.log('Project data:', project);
+        const projectData = response.data as Project;
+        setProject(projectData);
+        console.log('Project data:', projectData);
         
         setFormData({
-          title: project.title || '',
-          description: project.description || '',
-          thumbnail: project.thumbnail || '',
-          liveUrl: project.liveUrl || '',
-          githubUrl: project.githubUrl || '',
-          technologies: project.technologies || [],
-          features: project.features || [],
-          published: project.published || false,
+          title: projectData.title || '',
+          description: projectData.description || '',
+          thumbnail: projectData.thumbnail || '',
+          liveUrl: projectData.liveUrl || '',
+          githubUrl: projectData.githubUrl || '',
+          technologies: projectData.technologies || [],
+          features: projectData.features || [],
+          published: projectData.published || false,
         });
       } catch (error) {
         console.error('Error fetching project:', error);

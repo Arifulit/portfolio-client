@@ -32,7 +32,7 @@ export default function ManageProjectsPage() {
           throw new Error('No authentication token found');
         }
 
-        const response = await fetch('http://localhost:5000/api/projects', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/projects`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -76,7 +76,7 @@ export default function ManageProjectsPage() {
         throw new Error('No authentication token found');
       }
 
-      const response = await fetch(`http://localhost:5000/api/projects/${id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/projects/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`

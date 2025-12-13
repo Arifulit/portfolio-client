@@ -47,8 +47,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
 const login = async (email: string, password: string) => {
   try {
-    console.log('লগইন চেষ্টা করা হচ্ছে:', { email });
-    const response = await fetch('http://localhost:5000/api/auth/login', {
+    console.log('Login attempt:', { email });
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
       method: 'POST',
       headers: { 
         'Content-Type': 'application/json',
@@ -61,30 +61,30 @@ const login = async (email: string, password: string) => {
     // Check if response is OK before parsing JSON
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || 'লগইন ব্যর্থ হয়েছে। ইমেইল ও পাসওয়ার্ড চেক করুন।');
+      throw new Error(errorData.message || 'Login failed. Please check your email and password.');
     }
 
     const data = await response.json();
-    console.log('লগইন রেসপন্স:', data);
+    console.log('login response:', data);
 
     if (!data.success) {
-      throw new Error(data.message || 'লগইন ব্যর্থ হয়েছে।');
+      throw new Error(data.message || 'login failed');
     }
 
-    // টোকেন এবং ইউজার ডাটা সেভ করা হচ্ছে
+    // save token and user data in localStorage
     localStorage.setItem('token', data.token);
     localStorage.setItem('user', JSON.stringify(data.user));
     setUser(data.user);
     
-    toast.success('সফলভাবে লগইন করা হয়েছে!');
-    console.log('লগইন সফল, ড্যাশবোর্ডে যাচ্ছি...');
+    toast.success('Login Successful');
+    console.log('Login Successful');
     
     // Redirect to dashboard
     window.location.href = '/dashboard';
     
   } catch (error: any) {
-    console.error('লগইন এরর:', error);
-    toast.error(error.message || 'লগইন ব্যর্থ হয়েছে। আবার চেষ্টা করুন।');
+    console.error('Login error:', error);
+    toast.error(error.message || 'Login failed, please try again');
     throw error;
   }
 };

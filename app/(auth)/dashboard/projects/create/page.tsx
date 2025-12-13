@@ -81,7 +81,7 @@ export default function CreateProjectPage() {
         throw new Error('No authentication token found');
       }
 
-      const response = await fetch('http://localhost:5000/api/projects', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/projects`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

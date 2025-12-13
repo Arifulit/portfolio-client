@@ -29,7 +29,7 @@ export default function ManageBlogsPage() {
           throw new Error('No authentication token found');
         }
 
-        const response = await fetch('http://localhost:5000/api/blogs/dashboard/all', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/blogs/dashboard/all`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -97,7 +97,7 @@ export default function ManageBlogsPage() {
         throw new Error('No authentication token found');
       }
 
-      const response = await fetch(`http://localhost:5000/api/blogs/${id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/blogs/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
