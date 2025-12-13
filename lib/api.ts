@@ -133,13 +133,19 @@ export const blogAPI = {
 export const projectAPI = {
   // Get all projects (Public)
   getAll: async (): Promise<ProjectsResponse> => {
-    const response = await apiClient.get<ProjectsResponse>('/projects');
+    const response = await apiClient.get('/projects');
     return response.data;
   },
 
   // Get single project by ID (Public)
   getById: async (id: string): Promise<{ success: boolean; data: { project: any } }> => {
     const response = await apiClient.get(`/projects/${id}`);
+    return response.data;
+  },
+
+  // Update project (Protected)
+  update: async (id: string, data: any): Promise<{ success: boolean; message?: string }> => {
+    const response = await apiClient.put(`/projects/${id}`, data);
     return response.data;
   },
 };
