@@ -5,11 +5,12 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { blogAPI, handleApiError } from '@/lib/api';
 import { Blog, BlogFormData } from '@/types';
-import { Input } from '@/components/ui/Input';
-import { Textarea } from '@/components/ui/Textarea';
+import { FormInput } from '@/components/ui/FormInput';
+// import { Textarea } from '@/components/ui/Textarea';
 import { Button } from '@/components/ui/Button';
-import { Card } from '@/components/ui/Card';
+import { Card } from '@/components/ui/card';
 import toast from 'react-hot-toast';
+import { Textarea } from '@/components/ui/textarea';
 
 interface FormErrors {
   title?: string;
@@ -166,7 +167,7 @@ export default function EditBlogPage({ params }: { params: { id: string } }) {
 
       <Card>
         <form onSubmit={handleSubmit} className="space-y-6">
-          <Input
+          <FormInput
             label="Title"
             name="title"
             value={formData.title}
@@ -176,7 +177,7 @@ export default function EditBlogPage({ params }: { params: { id: string } }) {
             required
           />
 
-          <Input
+          <FormInput
             label="Excerpt (Optional)"
             name="excerpt"
             value={formData.excerpt}
@@ -184,18 +185,26 @@ export default function EditBlogPage({ params }: { params: { id: string } }) {
             placeholder="Short description"
           />
 
-          <Textarea
-            label="Content"
-            name="content"
-            value={formData.content}
-            onChange={handleChange}
-            error={errors.content}
-            placeholder="Write your blog content here..."
-            rows={12}
-            required
-          />
+          <div className="space-y-2">
+            <label htmlFor="content" className="text-sm font-medium leading-none">
+              Content <span className="text-red-500">*</span>
+            </label>
+            <Textarea
+              id="content"
+              name="content"
+              value={formData.content}
+              onChange={handleChange}
+              placeholder="Write your blog content here..."
+              rows={12}
+              className={`${errors.content ? 'border-red-500' : ''}`}
+              required
+            />
+            {errors.content && (
+              <p className="text-sm text-red-500">{errors.content}</p>
+            )}
+          </div>
 
-          <Input
+          <FormInput
             label="Featured Image URL (Optional)"
             name="featuredImage"
             value={formData.featuredImage}
@@ -209,7 +218,7 @@ export default function EditBlogPage({ params }: { params: { id: string } }) {
               Tags (Optional)
             </label>
             <div className="flex gap-2 mb-2">
-              <Input
+              <FormInput
                 value={tagInput}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTagInput(e.target.value)}
                 onKeyPress={(e: { key: string; preventDefault: () => void; }) => {

@@ -1,84 +1,90 @@
 import Link from 'next/link';
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/ui/Button'; // shadcn/ui button
+import { Code2, Smartphone, Zap, ArrowRight, Github, Linkedin, Mail } from 'lucide-react';
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary-600 to-primary-800 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-900 text-white">
+      {/* Hero Section - Modern Dark Style */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 py-32">
+        <div className="absolute inset-0 bg-grid-white/5"></div> {/* Optional subtle grid background */}
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 animate-fade-in">
-              Welcome to My Portfolio
+            <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6">
+              Hi, I'm <span className="text-blue-400">Your Name</span>
+              <br />
+              <span className="text-4xl md:text-6xl">Full-Stack Developer</span>
             </h1>
-            <p className="text-xl md:text-2xl text-primary-100 mb-8 max-w-3xl mx-auto">
-              A passionate web developer creating amazing digital experiences
+            <p className="text-xl md:text-2xl text-gray-300 mb-10 max-w-3xl mx-auto">
+              I build exceptional web experiences with Next.js, Prisma, Tailwind CSS, and modern technologies.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
               <Link href="/projects">
-                <Button size="lg" variant="secondary">
-                  View Projects
+                <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg">
+                  View My Projects <ArrowRight className="ml-2" size={20} />
                 </Button>
               </Link>
-              <Link href="/blogs">
-                <Button size="lg" variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-primary-600">
-                  Read Blog
+              <Link href="/contact">
+                <Button size="lg" variant="outline" className="border-gray-600 text-white hover:bg-gray-800 px-8 py-6 text-lg">
+                  Get In Touch
                 </Button>
               </Link>
+            </div>
+            {/* Social Icons */}
+            <div className="mt-12 flex justify-center space-x-6">
+              <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition">
+                <Github size={28} />
+              </a>
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition">
+                <Linkedin size={28} />
+              </a>
+              <a href="mailto:your@email.com" className="text-gray-400 hover:text-white transition">
+                <Mail size={28} />
+              </a>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-20 bg-gray-50">
+      {/* Features / Skills Section - Dark Cards */}
+      <section className="py-24 bg-gray-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              What I Offer
-            </h2>
-            <p className="text-lg text-gray-600">
-              Explore my work and expertise
-            </p>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">What I Do</h2>
+            <p className="text-xl text-gray-400">Crafting high-performance applications with cutting-edge tools</p>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Feature 1 */}
-            <div className="bg-white p-8 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-              <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mb-6 mx-auto">
-                <svg className="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
-                </svg>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+            {/* Card 1 */}
+            <div className="bg-gray-800/50 backdrop-blur border border-gray-700 rounded-2xl p-8 hover:border-blue-500 transition-all duration-300">
+              <div className="w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center mb-6 mx-auto">
+                <Code2 size={32} className="text-blue-400" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">Web Development</h3>
-              <p className="text-gray-600">
-                Building responsive and performant web applications using modern technologies.
+              <h3 className="text-2xl font-semibold mb-4">Full-Stack Development</h3>
+              <p className="text-gray-400">
+                Building scalable web apps with Next.js, Express, Prisma, and PostgreSQL/MongoDB.
               </p>
             </div>
 
-            {/* Feature 2 */}
-            <div className="bg-white p-8 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-              <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mb-6 mx-auto">
-                <svg className="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-                </svg>
+            {/* Card 2 */}
+            <div className="bg-gray-800/50 backdrop-blur border border-gray-700 rounded-2xl p-8 hover:border-blue-500 transition-all duration-300">
+              <div className="w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center mb-6 mx-auto">
+                <Smartphone size={32} className="text-blue-400" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">Mobile First</h3>
-              <p className="text-gray-600">
-                Designing with a mobile-first approach for optimal user experience on all devices.
+              <h3 className="text-2xl font-semibold mb-4">Responsive Design</h3>
+              <p className="text-gray-400">
+                Mobile-first, pixel-perfect UIs with Tailwind CSS for seamless experience across devices.
               </p>
             </div>
 
-            {/* Feature 3 */}
-            <div className="bg-white p-8 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-              <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mb-6 mx-auto">
-                <svg className="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                </svg>
+            {/* Card 3 */}
+            <div className="bg-gray-800/50 backdrop-blur border border-gray-700 rounded-2xl p-8 hover:border-blue-500 transition-all duration-300">
+              <div className="w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center mb-6 mx-auto">
+                <Zap size={32} className="text-blue-400" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">Performance</h3>
-              <p className="text-gray-600">
-                Optimized solutions that load quickly and run smoothly.
+              <h3 className="text-2xl font-semibold mb-4">Performance & SEO</h3>
+              <p className="text-gray-400">
+                Optimized code with SSR, ISR, and best practices for lightning-fast loading and great rankings.
               </p>
             </div>
           </div>
@@ -86,15 +92,15 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-primary-700 text-white">
+      <section className="py-24 bg-gradient-to-r from-blue-900 to-gray-900">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to start your project?</h2>
-          <p className="text-xl text-primary-100 mb-8 max-w-3xl mx-auto">
-            Let's work together to bring your ideas to life
+          <h2 className="text-4xl md:text-5xl font-bold mb-6">Let's Build Something Amazing Together</h2>
+          <p className="text-xl text-gray-300 mb-10">
+            Have a project in mind? I'm ready to help bring your vision to life.
           </p>
           <Link href="/contact">
-            <Button size="lg" variant="secondary">
-              Get in Touch
+            <Button size="lg" className="bg-white text-gray-900 hover:bg-gray-200 px-10 py-7 text-xl font-semibold">
+              Start a Project <ArrowRight className="ml-3" size={24} />
             </Button>
           </Link>
         </div>

@@ -135,6 +135,8 @@ export interface AboutMe {
   };
   workExperience: WorkExperience[];
   skills: Skill[];
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface WorkExperience {
@@ -149,7 +151,7 @@ export interface WorkExperience {
 export interface Skill {
   id: string;
   name: string;
-  category: 'frontend' | 'backend' | 'database' | 'tools' | 'other';
+  category: 'frontend' | 'backend' | 'database' | 'tools' | 'other' | 'languages';
   proficiency?: number; // 0-100
 }
 
