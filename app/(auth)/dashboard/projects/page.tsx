@@ -27,15 +27,8 @@ export default function ManageProjectsPage() {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          throw new Error('No authentication token found');
-        }
-
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/projects`, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
+          credentials: 'include' // This will send the HTTP-only token cookie
         });
 
         if (!response.ok) {
@@ -71,16 +64,9 @@ export default function ManageProjectsPage() {
     }
 
     try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        throw new Error('No authentication token found');
-      }
-
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/projects/${id}`, {
         method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
+        credentials: 'include' // This will send the HTTP-only token cookie
       });
 
       if (!response.ok) {

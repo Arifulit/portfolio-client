@@ -61,15 +61,12 @@ export default function CreateProjectPage() {
     setIsSubmitting(true);
 
     try {
-      const token = localStorage.getItem('token');
-      if (!token) throw new Error('No authentication token found');
-
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/projects`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
         },
+        credentials: 'include', // This will send the HTTP-only token cookie
         body: JSON.stringify(formData)
       });
 

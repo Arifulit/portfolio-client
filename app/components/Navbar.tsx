@@ -1,107 +1,132 @@
+// app/components/Navbar.tsx
 'use client';
 
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
-import { useAuth } from '@/context/AuthContext';
 import { usePathname, useRouter } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext';
+import { useState, useEffect } from 'react';
+import { Menu, X, User, LogOut, Home, Briefcase, FileText, Info } from 'lucide-react';
+import Cookies from 'js-cookie';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const { isAuthenticated, user, logout } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
+
+  // Handle scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Close mobile menu when route changes
   useEffect(() => {
     setIsOpen(false);
   }, [pathname]);
 
-  const navLinks = [
-    { href: '/', label: 'Home' },
-    { href: '/projects', label: 'Projects' },
-    { href: '/blogs', label: 'Blogs' },
-    { href: '/about', label: 'About Me' },
-    
-  ];
-
   const handleLogout = () => {
     logout();
     router.push('/');
   };
 
+  const navLinks = [
+    { href: '/', label: 'Home', icon: Home },
+    { href: '/projects', label: 'Projects', icon: Briefcase },
+    { href: '/blogs', label: 'Blog', icon: FileText },
+    { href: '/about', label: 'About Me', icon: Info },
+  ];
+
   return (
-    <nav className="sticky top-0 z-50 bg-gray-900 border-b border-gray-800 backdrop-blur-sm bg-opacity-90">
+    <nav className={`sticky top-0 z-50 bg-gray-900 border-b border-gray-800 backdrop-blur-sm bg-opacity-90 ${
+      isScrolled 
+        ? 'bg-slate-900/95 backdrop-blur-md shadow-lg border-b border-slate-700' 
+        : 'bg-slate-800 shadow-sm'
+    }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex justify-between h-16">
           {/* Logo */}
           <div className="flex items-center">
             <Link 
               href="/" 
-              className="text-2xl font-bold text-white hover:text-blue-400 transition"
+              className="flex items-center space-x-2 group"
               onClick={() => setIsOpen(false)}
             >
-              Portfolio
+              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                <span className="text-white font-bold text-lg">P</span>
+              </div>
+              <span className="text-xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                MyPortfolio
+              </span>
             </Link>
           </div>
-
+          
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium group relative"
-              >
-                {link.label}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-500 transition-all group-hover:w-full"></span>
-              </Link>
-            ))}
-
-            {/* Auth Buttons */}
-            <div className="flex items-center space-x-4 ml-8">
-              {isAuthenticated ? (
-                <>
-                  {user && (
-                    <span className="text-gray-300 hidden md:inline">
-                      Welcome, {user.name}
-                    </span>
-                  )}
-                  <button
-                    onClick={handleLogout}
-                    className="px-4 py-2 text-gray-300 hover:text-white font-medium transition hover:text-blue-400"
-                  >
-                    Logout
-                  </button>
-                  <Link
-                    href="/dashboard"
-                    className="px-5 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition font-medium"
-                  >
-                    Dashboard
-                  </Link>
-                </>
-              ) : (
+          <div className="hidden md:flex items-center space-x-1">
+            {navLinks.map((link) => {
+              const Icon = link.icon;
+              const isActive = pathname === link.href;
+              return (
                 <Link
-                  href="/login"
-                  className="px-5 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition font-medium"
-                  onClick={() => {
-                    // Clear any existing auth state to ensure fresh login
-                    localStorage.removeItem('token');
-                    localStorage.removeItem('user');
-                  }}
+                  key={link.href}
+                  href={link.href}
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 ${
+                    isActive
+                      ? 'bg-blue-500/20 text-blue-400 shadow-sm'
+                      : 'text-gray-300 hover:text-white hover:bg-white/10'
+                  }`}
                 >
-                  Login
+                  <Icon className="w-4 h-4" />
+                  <span className="font-medium">{link.label}</span>
                 </Link>
-              )}
-            </div>
+              );
+            })}
+
+            {isAuthenticated ? (
+              <div className="flex items-center space-x-2 ml-4 pl-4 border-l border-slate-600">
+                <div className="flex items-center space-x-2 px-3 py-2 bg-slate-700/50 rounded-lg">
+                  <User className="w-4 h-4 text-gray-300" />
+                  <span className="text-sm font-medium text-gray-200">
+                    {user?.name || 'Admin'}
+                  </span>
+                </div>
+                <Link
+                  href="/dashboard"
+                  className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200 shadow-sm hover:shadow-md"
+                >
+                  <span className="font-medium">Dashboard</span>
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center space-x-2 px-4 py-2 text-gray-300 hover:bg-red-500/20 hover:text-red-400 rounded-lg transition-all duration-200"
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span className="font-medium">Logout</span>
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => {
+                  Cookies.remove('user');
+                  window.location.href = '/login';
+                }}
+                className="flex items-center space-x-2 px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-200 shadow-sm hover:shadow-md transform hover:scale-105"
+              >
+                <User className="w-4 h-4" />
+                <span className="font-medium">Login</span>
+              </button>
+            )}
           </div>
 
           {/* Mobile menu button */}
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none"
-              aria-expanded="false"
+              className="inline-flex items-center justify-center p-2 rounded-lg text-gray-300 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
             >
               <span className="sr-only">Open main menu</span>
               {isOpen ? (
@@ -115,61 +140,73 @@ export default function Navbar() {
       </div>
 
       {/* Mobile menu */}
-      {isOpen && (
-        <div className="md:hidden">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-gray-900">
-            {navLinks.map((link) => (
+      <div className={`md:hidden transition-all duration-300 ${
+        isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'
+      }`}>
+        <div className="px-4 py-6 space-y-2 bg-slate-900/95 backdrop-blur-md border-t border-slate-700">
+          {navLinks.map((link) => {
+            const Icon = link.icon;
+            const isActive = pathname === link.href;
+            return (
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 ${
+                  isActive
+                    ? 'bg-blue-500/20 text-blue-400 shadow-sm'
+                    : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                }`}
+                onClick={() => setIsOpen(false)}
               >
-                {link.label}
+                <Icon className="w-5 h-5" />
+                <span className="font-medium">{link.label}</span>
               </Link>
-            ))}
-
+            );
+          })}
+          
+          <div className="border-t border-slate-700 pt-4 mt-4">
             {isAuthenticated ? (
               <>
-                <div className="pt-4 pb-3 border-t border-gray-700">
-                  <div className="flex items-center px-5">
-                    <div className="text-base font-medium text-white">
-                      Welcome, {user?.name}
-                    </div>
-                  </div>
-                  <div className="mt-3 space-y-1 px-2">
-                    <Link
-                      href="/dashboard"
-                      className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700"
-                    >
-                      Dashboard
-                    </Link>
-                    <button
-                      onClick={handleLogout}
-                      className="w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700"
-                    >
-                      Logout
-                    </button>
-                  </div>
+                <div className="flex items-center space-x-3 px-4 py-3 bg-slate-700/50 rounded-lg mb-2">
+                  <User className="w-5 h-5 text-gray-300" />
+                  <span className="font-medium text-gray-200">
+                    {user?.name || 'Admin'}
+                  </span>
                 </div>
+                <Link
+                  href="/dashboard"
+                  className="flex items-center space-x-3 px-4 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200 mb-2"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <span className="font-medium">Dashboard</span>
+                </Link>
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    setIsOpen(false);
+                  }}
+                  className="w-full flex items-center space-x-3 px-4 py-3 text-red-400 hover:bg-red-500/20 rounded-lg transition-all duration-200"
+                >
+                  <LogOut className="w-5 h-5" />
+                  <span className="font-medium">Logout</span>
+                </button>
               </>
             ) : (
-              <div className="pt-4 pb-3 border-t border-gray-700">
-                <Link
-                  href="/login"
-                  className="block w-full text-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700"
-                  onClick={() => {
-                    // Clear any existing auth state to ensure fresh login
-                    localStorage.removeItem('token');
-                    localStorage.removeItem('user');
-                  }}
-                >
-                  Login
-                </Link>
-              </div>
+              <button
+                onClick={() => {
+                  setIsOpen(false);
+                  Cookies.remove('user');
+                  window.location.href = '/login';
+                }}
+                className="w-full flex items-center justify-center space-x-3 px-4 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-200"
+              >
+                <User className="w-5 h-5" />
+                <span className="font-medium">Login</span>
+              </button>
             )}
           </div>
         </div>
-      )}
+      </div>
     </nav>
   );
 }

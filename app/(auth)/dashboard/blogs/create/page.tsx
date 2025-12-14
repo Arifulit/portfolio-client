@@ -70,15 +70,12 @@ export default function CreateBlogPage() {
 
     setIsSubmitting(true);
     try {
-      const token = localStorage.getItem('token');
-      if (!token) throw new Error('No authentication token found');
-
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/blogs`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
         },
+        credentials: 'include', // This will send the HTTP-only token cookie
         body: JSON.stringify({
           title: formData.title,
           description: formData.excerpt,

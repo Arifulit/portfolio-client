@@ -23,7 +23,7 @@ interface Project {
 async function getProject(id: string): Promise<Project | null> {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/projects/${id}`,
+      `http://localhost:5000/api/projects/${id}`,
       { next: { revalidate: 60 } }
     );
 

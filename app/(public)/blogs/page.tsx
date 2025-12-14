@@ -25,7 +25,7 @@ export default function BlogPage() {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/blogs`);
+        const response = await fetch('http://localhost:5000/api/blogs');
         
         if (!response.ok) {
           throw new Error('Failed to fetch blogs');
@@ -96,9 +96,9 @@ export default function BlogPage() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">Blog Posts</h1>
+        <h1 className="text-4xl font-bold text-gray-900 mb-6">Blogs</h1>
         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
           Latest articles and tutorials on web development and more
         </p>

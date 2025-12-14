@@ -21,16 +21,14 @@ const apiClient: AxiosInstance = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true, // This will send cookies with requests
   timeout: 10000,
 });
 
-// Request interceptor - Add auth token
+// Request interceptor - No need to add token header since we're using cookies
 apiClient.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
+    // Token is sent via HTTP-only cookie by the backend
     return config;
   },
   (error) => {
@@ -54,8 +52,8 @@ apiClient.interceptors.response.use(
       
       // Handle 401 - Unauthorized
       if (error.response.status === 401) {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
+        // Clear user cookie (if it exists) and redirect to login
+        document.cookie = 'user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         window.location.href = '/login';
       }
     } else if (error.request) {
@@ -75,8 +73,8 @@ export const authAPI = {
 
   logout: async (): Promise<void> => {
     await apiClient.post('/auth/logout');
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    // Clear user cookie (if it exists)
+    document.cookie = 'user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
   },
 
   getProfile: async (): Promise<AuthResponse> => {

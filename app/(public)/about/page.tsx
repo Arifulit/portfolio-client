@@ -14,7 +14,7 @@ const staticAboutData: AboutMe = {
   email: 'ariful.iit@gmail.com',
   phone: '01763584915',
   location: 'Dhaka,Bangladesh',
-  bio: 'Full-stack developer with 5+ years of experience building modern web applications. Passionate about creating clean, efficient, and user-friendly solutions.',
+  bio: 'Full-stack developer with 2+ years of experience building modern web applications. Passionate about creating clean, efficient, and user-friendly solutions.',
   profileImage: '/images/profile.jpg',
   socialLinks: {
     github: 'https://github.com/Arifulit',

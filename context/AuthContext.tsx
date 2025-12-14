@@ -1,14 +1,15 @@
+
 'use client';
 
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
+import Cookies from 'js-cookie';
 
 interface User {
   id: string;
   email: string;
   name: string;
-  token?: string; // Make token optional as it might not always be present
 }
 
 interface AuthContextType {
@@ -19,7 +20,7 @@ interface AuthContextType {
   loading: boolean;
 }
 
-const AuthContext = createContext<AuthContextType | null>(null);
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -29,12 +30,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const token = localStorage.getItem('token');
-        if (token) {
-          const userData = localStorage.getItem('user');
-          if (userData) {
-            setUser(JSON.parse(userData));
-          }
+        // Check if we have a user cookie
+        const userData = Cookies.get('user');
+        if (userData) {
+          setUser(JSON.parse(userData));
         }
       } catch (error) {
         console.error('Auth check failed:', error);
@@ -46,71 +45,68 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     checkAuth();
   }, []);
 
-const login = async (email: string, password: string) => {
-  try {
-    console.log('Login attempt:', { email });
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify({ email, password }),
-      credentials: 'include' // Important for cookies/sessions if using them
-    });
+  const login = async (email: string, password: string) => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+        credentials: 'include', // Important for cookies
+      });
 
-    // Check if response is OK before parsing JSON
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || 'Login failed. Please check your email and password.');
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || 'Login failed');
+      }
+
+      const data = await response.json();
+      
+      // Save user data in a cookie (not HTTP-only so it can be read client-side)
+      Cookies.set('user', JSON.stringify(data.user), { 
+        expires: 7, // 7 days
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax'
+      });
+
+      setUser(data.user);
+      toast.success('Login successful');
+      router.push('/dashboard');
+    } catch (error: any) {
+      console.error('Login error:', error);
+      toast.error(error.message || 'Login failed. Please try again.');
+      throw error;
     }
-
-    const data = await response.json();
-    console.log('login response:', data);
-
-    if (!data.success) {
-      throw new Error(data.message || 'login failed');
-    }
-
-    // save token and user data in localStorage
-    localStorage.setItem('token', data.token);
-    localStorage.setItem('user', JSON.stringify(data.user));
-    setUser(data.user);
-    
-    toast.success('Login Successful');
-    console.log('Login Successful');
-    
-    // Get the base URL from environment variable or use current origin
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || window.location.origin;
-    const redirectUrl = `${baseUrl}/dashboard`;
-    
-    console.log('Redirecting to:', redirectUrl);
-    window.location.href = redirectUrl;
-    
-  } catch (error: any) {
-    console.error('Login error:', error);
-    toast.error(error.message || 'Login failed, please try again');
-    throw error;
-  }
-};
-
-  const logout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    setUser(null);
-    router.push('/login');
   };
 
-  const contextValue = {
-    user,
-    isAuthenticated: !!user,
-    login,
-    logout,
-    loading
+  const logout = async () => {
+    try {
+      // Call the logout API to clear the HTTP-only cookie
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {
+        method: 'POST',
+        credentials: 'include',
+      });
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      // Clear client-side state
+      setUser(null);
+      Cookies.remove('user');
+      router.push('/login');
+    }
   };
 
   return (
-    <AuthContext.Provider value={contextValue}>
+    <AuthContext.Provider
+      value={{
+        user,
+        isAuthenticated: !!user,
+        login,
+        logout,
+        loading,
+      }}
+    >
       {!loading && children}
     </AuthContext.Provider>
   );
@@ -118,7 +114,7 @@ const login = async (email: string, password: string) => {
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) {
+  if (context === undefined) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;

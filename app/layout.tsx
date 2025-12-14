@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   title: 'MyPortfolio - Web Developer',
   description: 'Personal portfolio showcasing my projects and blog posts',
   keywords: ['portfolio', 'web developer', 'blog', 'projects'],
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'),
   openGraph: {
     siteName: 'MyPortfolio',
     locale: 'en_US',
@@ -39,3 +39,5 @@ export default function RootLayout({
     </html>
   );
 }
+
+// app/layout.tsx

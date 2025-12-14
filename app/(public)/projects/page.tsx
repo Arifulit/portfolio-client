@@ -23,7 +23,7 @@ export default function ProjectsPage() {
     const fetchProjects = async () => {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/projects`
+          'http://localhost:5000/api/projects'
         );
 
         if (!res.ok) throw new Error('Failed to fetch projects');

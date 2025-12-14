@@ -64,23 +64,36 @@ export default function DashboardPage() {
         const baseUrl =
           process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
-        const token = localStorage.getItem('token');
-
-        const headers = {
-          Authorization: `Bearer ${token}`,
-        };
+        // No need to manually add token header since we're using credentials: 'include'
+        const headers = {};
 
         const [projectsRes, blogsRes] = await Promise.all([
-          fetch(`${baseUrl}/projects/dashboard/stats`, { headers }),
-          fetch(`${baseUrl}/blogs/dashboard/stats`, { headers }),
+          fetch(`${baseUrl}/projects/dashboard/stats`, { 
+            headers,
+            credentials: 'include'
+          }),
+          fetch(`${baseUrl}/blogs/dashboard/stats`, { 
+            headers,
+            credentials: 'include'
+          }),
         ]);
 
         const projectsData = await projectsRes.json();
         const blogsData = await blogsRes.json();
 
         setStats({
-          projects: projectsData.data,
-          blogs: blogsData.data,
+          projects: projectsData.data || {
+            total: 0,
+            withLiveUrl: 0,
+            withGithubUrl: 0,
+            recent: []
+          },
+          blogs: blogsData.data || {
+            total: 0,
+            published: 0,
+            drafts: 0,
+            recent: []
+          },
         });
       } catch (error) {
         console.error('Dashboard fetch error', error);

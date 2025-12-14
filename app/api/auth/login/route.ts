@@ -38,3 +38,6 @@ export async function POST(request: NextRequest) {
 }
 
 export const dynamic = 'force-dynamic'; // Ensure this route is server-side rendered
+
+
+// app/api/auth/login/route.ts

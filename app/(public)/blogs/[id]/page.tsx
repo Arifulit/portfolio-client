@@ -29,7 +29,7 @@ export const revalidate = 60;
 
 export async function generateStaticParams() {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/blogs`, {
+    const res = await fetch('http://localhost:5000/api/blogs', {
       next: { revalidate: 60 },
     });
 
@@ -51,7 +51,7 @@ export async function generateStaticParams() {
 async function getBlog(id: string): Promise<Blog | null> {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/blogs/${id}`,
+      `http://localhost:5000/api/blogs/${id}`,
       { next: { revalidate: 60 } }
     );
 

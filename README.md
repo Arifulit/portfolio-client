@@ -133,12 +133,12 @@ npm run type-check   # Run TypeScript type checking
 
 ## 🔐 Authentication
 
-The application uses JWT-based authentication:
+The application uses JWT-based authentication with cookies:
 
 1. User logs in with email and password
-2. Server returns JWT token
-3. Token stored in localStorage
-4. Token sent with every API request via Axios interceptor
+2. Server returns JWT token as HTTP-only cookie
+3. User data stored in regular cookie (client-side readable)
+4. Token automatically sent with every API request via credentials: 'include'
 5. Protected routes check token validity via middleware
 
 ### Demo Credentials

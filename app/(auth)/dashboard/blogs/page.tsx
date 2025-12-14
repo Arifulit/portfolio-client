@@ -24,15 +24,8 @@ export default function ManageBlogsPage() {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          throw new Error('No authentication token found');
-        }
-
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/blogs/dashboard/all`, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
+          credentials: 'include' // This will send the HTTP-only token cookie
         });
 
         if (!response.ok) {
@@ -92,16 +85,9 @@ export default function ManageBlogsPage() {
     }
 
     try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        throw new Error('No authentication token found');
-      }
-
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/blogs/${id}`, {
         method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
+        credentials: 'include' // This will send the HTTP-only token cookie
       });
 
       if (!response.ok) {
