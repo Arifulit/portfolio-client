@@ -9,13 +9,12 @@ export function middleware(request: NextRequest) {
   // Protected routes
   if (pathname.startsWith('/dashboard') && !token) {
     const loginUrl = new URL('/login', request.url);
-    loginUrl.searchParams.set('redirect', pathname);
     return NextResponse.redirect(loginUrl);
   }
 
   // If user is logged in, don't allow access to auth pages
   if (['/login', '/register'].includes(pathname) && token) {
-    return NextResponse.redirect(new URL('/', request.url));
+    return NextResponse.redirect(new URL('/dashboard', request.url));
   }
 
   return NextResponse.next();
