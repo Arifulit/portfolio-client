@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  const token = request.cookies.get('token'); // This should be set by the backend as HTTP-only
+  const token = request.cookies.get('token') || request.cookies.get('user');
   const { pathname } = request.nextUrl;
 
   // Protected routes
