@@ -3,12 +3,13 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
-import { Mail, Lock, LogIn } from 'lucide-react';
+import { Mail, Lock, LogIn, Eye, EyeOff } from 'lucide-react';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('admin@portfolio.com');
   const [password, setPassword] = useState('admin123456');
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const { login } = useAuth();
   const router = useRouter();
 
@@ -72,14 +73,22 @@ export default function LoginPage() {
                 <Lock className="absolute left-3 top-3 h-5 w-5 text-gray-500" />
                 <input
                   id="password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   autoComplete="current-password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                  className="w-full pl-10 pr-12 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                   placeholder="••••••••"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-3 text-gray-400 hover:text-white focus:outline-none"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
               </div>
             </div>
 
@@ -99,20 +108,6 @@ export default function LoginPage() {
               )}
             </button>
           </form>
-
-          {/* Footer Note */}
-          <div className="mt-8 text-center text-sm text-gray-500">
-            <p>Demo Credentials:</p>
-            <p className="mt-1 font-medium text-gray-300">
-              Email: admin@portfolio.com <br />
-              Password: admin123456
-            </p>
-          </div>
-        </div>
-
-        {/* Bottom Credit */}
-        <div className="text-center mt-8 text-gray-500 text-sm">
-          © {new Date().getFullYear()} MyPortfolio. All rights reserved.
         </div>
       </div>
     </div>

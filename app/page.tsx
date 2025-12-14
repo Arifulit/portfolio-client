@@ -11,7 +11,7 @@ export default function HomePage() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6">
-              Hi, I'm <span className="text-blue-400">Your Name</span>
+              Hi, I'm <span className="text-blue-400">Ariful Islam</span>
               <br />
               <span className="text-4xl md:text-6xl">Full-Stack Developer</span>
             </h1>
@@ -32,13 +32,13 @@ export default function HomePage() {
             </div>
             {/* Social Icons */}
             <div className="mt-12 flex justify-center space-x-6">
-              <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition">
+              <a href="https://github.com/Arifulit" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition">
                 <Github size={28} />
               </a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition">
+              <a href="https://www.linkedin.com/in/ariful-islam15/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition">
                 <Linkedin size={28} />
               </a>
-              <a href="mailto:your@email.com" className="text-gray-400 hover:text-white transition">
+              <a href="mailto:ariful.iit@email.com" className="text-gray-400 hover:text-white transition">
                 <Mail size={28} />
               </a>
             </div>
@@ -98,9 +98,9 @@ export default function HomePage() {
           <p className="text-xl text-gray-300 mb-10">
             Have a project in mind? I'm ready to help bring your vision to life.
           </p>
-          <Link href="/contact">
-            <Button size="lg" className="bg-white text-gray-900 hover:bg-gray-200 px-10 py-7 text-xl font-semibold">
-              Start a Project <ArrowRight className="ml-3" size={24} />
+          <Link href="/blogs">
+            <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg">
+              View My Blogs <ArrowRight className="ml-2" size={20} />
             </Button>
           </Link>
         </div>

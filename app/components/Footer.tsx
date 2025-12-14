@@ -24,10 +24,10 @@ export default function Footer() {
           <div>
             <h4 className="text-lg font-semibold text-white mb-4">Quick Links</h4>
             <ul className="space-y-3 text-gray-400 text-sm">
-              <li><a href="#about" className="hover:text-white transition">About</a></li>
-              <li><a href="#projects" className="hover:text-white transition">Projects</a></li>
-              <li><a href="#blogs" className="hover:text-white transition">Blogs</a></li>
-              <li><a href="#contact" className="hover:text-white transition">Contact</a></li>
+              <li><a href="about" className="hover:text-white transition">About</a></li>
+              <li><a href="projects" className="hover:text-white transition">Projects</a></li>
+              <li><a href="blogs" className="hover:text-white transition">Blogs</a></li>
+              <li><a href="contact" className="hover:text-white transition">Contact</a></li>
             </ul>
           </div>
 
@@ -39,15 +39,15 @@ export default function Footer() {
                 <Twitter size={24} />
                 <span className="sr-only">Twitter</span>
               </a>
-              <a href="https://github.com/yourhandle" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition">
+              <a href="https://github.com/Arifulit" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition">
                 <Github size={24} />
                 <span className="sr-only">GitHub</span>
               </a>
-              <a href="https://linkedin.com/in/yourhandle" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition">
+              <a href="https://www.linkedin.com/in/ariful-islam15/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition">
                 <Linkedin size={24} />
                 <span className="sr-only">LinkedIn</span>
               </a>
-              <a href="mailto:your@email.com" className="text-gray-400 hover:text-white transition">
+              <a href="mailto:ariful.iit@email.com" className="text-gray-400 hover:text-white transition">
                 <Mail size={24} />
                 <span className="sr-only">Email</span>
               </a>

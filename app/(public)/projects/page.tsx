@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { format } from 'date-fns';
 
 interface Project {
@@ -9,12 +10,8 @@ interface Project {
   title: string;
   description: string;
   thumbnail: string;
-  liveUrl: string;
-  githubUrl: string;
-  features: string[];
   technologies: string[];
   createdAt: string;
-  updatedAt: string;
 }
 
 export default function ProjectsPage() {
@@ -25,27 +22,18 @@ export default function ProjectsPage() {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/projects`);
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/projects`
+        );
 
-        if (!response.ok) {
-          throw new Error('Failed to fetch projects');
-        }
+        if (!res.ok) throw new Error('Failed to fetch projects');
 
-        const responseData = await response.json();
-        
-        // Handle the API response format
-        if (Array.isArray(responseData)) {
-          setProjects(responseData);
-        } else if (responseData.data && Array.isArray(responseData.data)) {
-          setProjects(responseData.data);
-        } else {
-          throw new Error('Invalid response format from server');
-        }
-        
-        setError(null);
-      } catch (error) {
-        console.error('Error fetching projects:', error);
-        setError('Failed to load projects. Please try again later.');
+        const json = await res.json();
+        const data = Array.isArray(json) ? json : json.data;
+
+        setProjects(data || []);
+      } catch (err) {
+        setError('Unable to load projects. Please try again later.');
       } finally {
         setLoading(false);
       }
@@ -54,113 +42,111 @@ export default function ProjectsPage() {
     fetchProjects();
   }, []);
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
-  };
+  /* ================= STATES ================= */
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600"></div>
+      <div className="min-h-[70vh] flex items-center justify-center">
+        <div className="h-10 w-10 animate-spin rounded-full border-b-2 border-blue-600" />
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="max-w-7xl mx-auto p-6">
-        <div className="bg-red-50 border-l-4 border-red-400 p-4">
-          <div className="flex">
-            <div className="flex-shrink-0">
-              <svg className="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-              </svg>
-            </div>
-            <div className="ml-3">
-              <p className="text-sm text-red-700">{error}</p>
-            </div>
-          </div>
-        </div>
+      <div className="max-w-4xl mx-auto mt-20 bg-red-50 border border-red-200 p-6 rounded-lg text-center">
+        <p className="text-red-700">{error}</p>
       </div>
     );
   }
 
-  return (
-    <div className="max-w-7xl mx-auto p-6">
-      <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">My Projects</h1>
-        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-          A collection of my work showcasing various skills and technologies
-        </p>
-      </div>
+  /* ================= UI ================= */
 
-      {projects.length === 0 ? (
-        <div className="bg-white rounded-lg shadow p-6 text-center">
-          <p className="text-gray-600">No projects available at the moment.</p>
-        </div>
-      ) : (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {projects.map((project) => (
-            <Link 
-              href={`/projects/${project.id}`}
-              key={project.id}
-              className="block h-full group"
-            >
-              <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 h-full flex flex-col">
-                {project.thumbnail && (
-                  <div className="h-48 overflow-hidden">
-                    <img 
-                      src={project.thumbnail} 
+  return (
+    <main className="bg-gradient-to-b from-gray-50 to-white min-h-screen py-16 px-4">
+      <div className="max-w-7xl mx-auto">
+
+        {/* Header */}
+        <header className="text-center max-w-3xl mx-auto mb-14">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
+            Projects
+          </h1>
+          <p className="text-lg text-gray-600">
+            A curated selection of projects demonstrating my skills,
+            problem-solving ability, and modern development practices.
+          </p>
+        </header>
+
+        {/* Empty */}
+        {projects.length === 0 ? (
+          <div className="bg-white rounded-xl shadow-sm p-10 text-center text-gray-600">
+            No projects available at the moment.
+          </div>
+        ) : (
+          <section className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {projects.map((project) => (
+              <Link
+                key={project.id}
+                href={`/projects/${project.id}`}
+                className="group"
+              >
+                <article className="bg-white rounded-2xl shadow-sm border overflow-hidden hover:shadow-lg transition-all h-full flex flex-col">
+
+                  {/* Image */}
+                  <div className="relative h-52 w-full overflow-hidden">
+                    <Image
+                      src={project.thumbnail}
                       alt={project.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>
-                )}
-                <div className="p-6 flex-1 flex flex-col">
-                  <div className="flex-1">
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors">
+
+                  {/* Content */}
+                  <div className="p-6 flex flex-col flex-1">
+
+                    <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition">
                       {project.title}
                     </h3>
-                    <p className="text-gray-600 mb-4 line-clamp-3">{project.description}</p>
-                    
-                    <div className="mb-4">
-                      <h4 className="text-sm font-medium text-gray-700 mb-2">Technologies:</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {project.technologies.slice(0, 4).map((tech) => (
-                          <span key={tech} className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                            {tech}
-                          </span>
-                        ))}
-                        {project.technologies.length > 4 && (
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                            +{project.technologies.length - 4} more
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
 
-                  <div className="mt-auto pt-4 border-t border-gray-100">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-500">Created: {formatDate(project.createdAt)}</span>
-                      <div className="flex items-center text-primary-600 font-medium text-sm">
-                        View Details
-                        <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                        </svg>
-                      </div>
+                    <p className="text-gray-600 text-sm leading-relaxed line-clamp-3 mb-4">
+                      {project.description}
+                    </p>
+
+                    {/* Tech */}
+                    <div className="flex flex-wrap gap-2 mb-6">
+                      {project.technologies.slice(0, 4).map((tech) => (
+                        <span
+                          key={tech}
+                          className="px-3 py-1 text-xs font-semibold rounded-full bg-blue-50 text-blue-700 border border-blue-100"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                      {project.technologies.length > 4 && (
+                        <span className="px-3 py-1 text-xs rounded-full bg-gray-100 text-gray-700">
+                          +{project.technologies.length - 4}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Footer */}
+                    <div className="mt-auto pt-4 border-t flex items-center justify-between text-sm">
+                      <span className="text-gray-500">
+                        {format(new Date(project.createdAt), 'MMM dd, yyyy')}
+                      </span>
+
+                      <span className="inline-flex items-center gap-1 font-medium text-blue-600 group-hover:gap-2 transition-all">
+                        View Details →
+                      </span>
                     </div>
                   </div>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-      )}
-    </div>
+                </article>
+              </Link>
+            ))}
+          </section>
+        )}
+      </div>
+    </main>
   );
 }

@@ -8,6 +8,7 @@ interface User {
   id: string;
   email: string;
   name: string;
+  token?: string; // Make token optional as it might not always be present
 }
 
 interface AuthContextType {

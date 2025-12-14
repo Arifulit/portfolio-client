@@ -1,8 +1,9 @@
-import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { format } from 'date-fns';
+
+/* ================= TYPES ================= */
 
 interface Project {
   id: string;
@@ -17,149 +18,153 @@ interface Project {
   updatedAt: string;
 }
 
+/* ================= FETCH ================= */
+
 async function getProject(id: string): Promise<Project | null> {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/projects/${id}`, {
-      next: { revalidate: 60 } // Revalidate every minute
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/projects/${id}`,
+      { next: { revalidate: 60 } }
+    );
 
-    if (!res.ok) {
-      return null;
-    }
+    if (!res.ok) return null;
 
-    const data = await res.json();
-    return data.data;
-  } catch (error) {
-    console.error('Error fetching project:', error);
+    const json = await res.json();
+    return json.data;
+  } catch {
     return null;
   }
 }
 
-export default async function ProjectDetails({ params }: { params: { id: string } }) {
+/* ================= PAGE ================= */
+
+export default async function ProjectDetailsPage({
+  params,
+}: {
+  params: { id: string };
+}) {
   const project = await getProject(params.id);
 
-  if (!project) {
-    notFound();
-  }
+  if (!project) notFound();
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-5xl mx-auto">
-        <div className="bg-white rounded-xl shadow-md overflow-hidden">
-          {/* Project Header */}
-          <div className="relative h-96 w-full">
-            <Image
-              src={project.thumbnail}
-              alt={project.title}
-              fill
-              className="object-cover"
-              priority
-            />
-          </div>
+    <main className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-14 px-4">
+      <article className="max-w-6xl mx-auto bg-white rounded-2xl shadow-sm border overflow-hidden">
 
-          <div className="p-8">
-            {/* Title and Links */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8">
+        {/* Hero Image */}
+        <div className="relative h-[420px] w-full">
+          <Image
+            src={project.thumbnail}
+            alt={project.title}
+            fill
+            priority
+            className="object-cover"
+          />
+        </div>
+
+        {/* Content */}
+        <div className="p-8 md:p-12">
+
+          {/* Header */}
+          <header className="mb-10">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">{project.title}</h1>
-                <p className="mt-2 text-gray-500">
-                  Last updated: {format(new Date(project.updatedAt), 'MMMM d, yyyy')}
+                <h1 className="text-4xl font-extrabold text-gray-900 mb-2">
+                  {project.title}
+                </h1>
+                <p className="text-sm text-gray-500">
+                  Last updated:{' '}
+                  {format(new Date(project.updatedAt), 'MMMM dd, yyyy')}
                 </p>
               </div>
-              <div className="flex gap-4 mt-4 sm:mt-0">
+
+              <div className="flex gap-3">
                 {project.liveUrl && (
                   <a
                     href={project.liveUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-6 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors"
+                    className="px-6 py-2.5 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition"
                   >
                     Live Demo
                   </a>
                 )}
+
                 {project.githubUrl && (
                   <a
                     href={project.githubUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors"
+                    className="px-6 py-2.5 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition"
                   >
-                    View Code
+                    GitHub
                   </a>
                 )}
               </div>
             </div>
+          </header>
 
-            {/* Description */}
-            <div className="prose max-w-none mb-12">
-              <p className="text-lg text-gray-700">{project.description}</p>
-            </div>
+          {/* Description */}
+          <section className="mb-12">
+            <p className="text-lg leading-relaxed text-gray-700">
+              {project.description}
+            </p>
+          </section>
 
-            {/* Features */}
-            <div className="mb-12">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">Features</h2>
-              <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
+          {/* Features */}
+          {project.features?.length > 0 && (
+            <section className="mb-12">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                Key Features
+              </h2>
+              <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {project.features.map((feature, index) => (
-                  <li key={index} className="flex items-start">
-                    <svg
-                      className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                    <span className="text-gray-700">{feature}</span>
+                  <li
+                    key={index}
+                    className="flex items-start gap-2 text-gray-700"
+                  >
+                    <span className="mt-1 h-2 w-2 rounded-full bg-green-500" />
+                    {feature}
                   </li>
                 ))}
               </ul>
-            </div>
+            </section>
+          )}
 
-            {/* Technologies */}
-            <div>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">Technologies Used</h2>
+          {/* Technologies */}
+          {project.technologies?.length > 0 && (
+            <section className="mb-12">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                Technologies Used
+              </h2>
               <div className="flex flex-wrap gap-2">
                 {project.technologies.map((tech, index) => (
                   <span
                     key={index}
-                    className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary-100 text-primary-800"
+                    className="px-4 py-1.5 rounded-full text-sm font-semibold bg-blue-50 text-blue-700 border border-blue-100"
                   >
                     {tech}
                   </span>
                 ))}
               </div>
-            </div>
+            </section>
+          )}
 
-            {/* Back Button */}
-            <div className="mt-12 pt-6 border-t border-gray-200">
-              <Link
-                href="/projects"
-                className="inline-flex items-center text-primary-600 hover:text-primary-800"
-              >
-                <svg
-                  className="h-5 w-5 mr-2"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M10 19l-7-7m0 0l7-7m-7 7h18"
-                  />
-                </svg>
-                Back to Projects
-              </Link>
-            </div>
-          </div>
+          {/* Footer */}
+          <footer className="pt-6 border-t flex justify-between items-center">
+            <Link
+              href="/projects"
+              className="inline-flex items-center gap-2 text-blue-600 font-medium hover:underline"
+            >
+              ← Back to Projects
+            </Link>
+
+            <span className="text-sm text-gray-500">
+              Created on {format(new Date(project.createdAt), 'MMMM dd, yyyy')}
+            </span>
+          </footer>
         </div>
-      </div>
-    </div>
+      </article>
+    </main>
   );
 }

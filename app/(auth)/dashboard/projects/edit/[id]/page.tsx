@@ -43,15 +43,21 @@ export default function EditProjectPage() {
         setIsLoading(true);
         console.log('Fetching project with ID:', projectId);
         const response = await projectAPI.getById(projectId);
-        console.log('API Response:', response);
+        console.log('Full API Response:', JSON.stringify(response, null, 2));
         
         if (!response?.data) {
           throw new Error('Project not found');
         }
 
-        const projectData = response.data as Project;
-        setProject(projectData);
+        // Check if the response has a nested project property
+        const projectData = response.data.project || response.data;
+        
+        if (!projectData) {
+          throw new Error('No project data found in response');
+        }
+        
         console.log('Project data:', projectData);
+        setProject(projectData);
         
         setFormData({
           title: projectData.title || '',
