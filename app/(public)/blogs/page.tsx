@@ -25,7 +25,7 @@ export default function BlogPage() {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/blogs');
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/blogs`);
         
         if (!response.ok) {
           throw new Error('Failed to fetch blogs');

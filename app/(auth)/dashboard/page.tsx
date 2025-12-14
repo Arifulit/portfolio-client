@@ -62,7 +62,7 @@ export default function DashboardPage() {
     const fetchStats = async () => {
       try {
         const baseUrl =
-          process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+          process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
         // No need to manually add token header since we're using credentials: 'include'
         const headers = {};
