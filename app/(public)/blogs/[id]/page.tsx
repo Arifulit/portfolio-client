@@ -88,9 +88,7 @@ export async function generateMetadata(
   const blog = await getBlog(params.id);
 
   if (!blog) {
-    return {
-      title: 'Blog Not Found',
-    };
+    notFound();
   }
 
   return {
@@ -113,7 +111,9 @@ export default async function BlogDetailsPage({
 }) {
   const blog = await getBlog(params.id);
 
-  if (!blog) notFound();
+  if (!blog) {
+    notFound();
+  }
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
@@ -194,24 +194,5 @@ export default async function BlogDetailsPage({
         </footer>
       </article>
     </main>
-  );
-}
-
-/* ================= NOT FOUND ================= */
-
-export function NotFoundBlog() {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="text-center">
-        <h1 className="text-6xl font-bold">404</h1>
-        <p className="mt-2 text-gray-600">Blog not found</p>
-        <Link
-          href="/blogs"
-          className="inline-block mt-6 px-6 py-3 bg-blue-600 text-white rounded-lg"
-        >
-          Back to Blogs
-        </Link>
-      </div>
-    </div>
   );
 }
