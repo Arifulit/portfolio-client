@@ -80,8 +80,12 @@ const login = async (email: string, password: string) => {
     toast.success('Login Successful');
     console.log('Login Successful');
     
-    // Redirect to dashboard
-    window.location.href = '/dashboard';
+    // Get the base URL from environment variable or use current origin
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || window.location.origin;
+    const redirectUrl = `${baseUrl}/dashboard`;
+    
+    console.log('Redirecting to:', redirectUrl);
+    window.location.href = redirectUrl;
     
   } catch (error: any) {
     console.error('Login error:', error);
