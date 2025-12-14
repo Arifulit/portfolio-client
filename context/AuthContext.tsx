@@ -30,13 +30,22 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        // Check if we have a user cookie
+        // Check if we have a user cookie (for client-side user data)
         const userData = Cookies.get('user');
-        if (userData) {
+        // Also check for token cookie (for server-side authentication)
+        const token = Cookies.get('token');
+        
+        if (userData && token) {
           setUser(JSON.parse(userData));
+        } else if (userData) {
+          // If we have user data but no token, still show user but might need re-auth
+          setUser(JSON.parse(userData));
+        } else {
+          setUser(null);
         }
       } catch (error) {
         console.error('Auth check failed:', error);
+        setUser(null);
       } finally {
         setLoading(false);
       }
@@ -47,7 +56,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const login = async (email: string, password: string) => {
     try {
-      const response = await fetch('/api/auth/login', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -90,9 +99,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } catch (error) {
       console.error('Logout error:', error);
     } finally {
-      // Clear client-side state
+      // Clear client-side state and cookies
       setUser(null);
       Cookies.remove('user');
+      Cookies.remove('token');
       router.push('/login');
     }
   };
