@@ -18,6 +18,20 @@ export default function ProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [failedImages, setFailedImages] = useState<Set<string>>(new Set());
+
+  // Helper function to check if URL is from problematic domain
+  const isProblematicDomain = (url: string) => {
+    return url.includes('cdn.pixabay.com') || url.includes('images.pexels.com');
+  };
+
+  // Helper function to get safe image URL
+  const getSafeImageUrl = (thumbnail: string, projectId: string) => {
+    if (failedImages.has(projectId) || isProblematicDomain(thumbnail)) {
+      return 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=600&fit=crop&auto=format';
+    }
+    return thumbnail || 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=600&fit=crop&auto=format';
+  };
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -95,10 +109,13 @@ export default function ProjectsPage() {
                   {/* Image */}
                   <div className="relative h-52 w-full overflow-hidden">
                     <Image
-                      src={project.thumbnail}
+                      src={getSafeImageUrl(project.thumbnail, project.id)}
                       alt={project.title}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      onError={() => {
+                        setFailedImages(prev => new Set([...prev, project.id]));
+                      }}
                     />
                   </div>
 

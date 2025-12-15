@@ -47,6 +47,21 @@ export default async function ProjectDetailsPage({
 
   if (!project) notFound();
 
+  const fallbackImage = 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&h=600&fit=crop&auto=format';
+
+  // Helper function to check if URL is from problematic domain
+  const isProblematicDomain = (url: string) => {
+    return url.includes('cdn.pixabay.com') || url.includes('images.pexels.com');
+  };
+
+  // Helper function to get safe image URL
+  const getSafeImageUrl = (thumbnail: string) => {
+    if (isProblematicDomain(thumbnail)) {
+      return fallbackImage;
+    }
+    return thumbnail || fallbackImage;
+  };
+
   return (
     <main className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-14 px-4">
       <article className="max-w-6xl mx-auto bg-white rounded-2xl shadow-sm border overflow-hidden">
@@ -54,11 +69,15 @@ export default async function ProjectDetailsPage({
         {/* Hero Image */}
         <div className="relative h-[420px] w-full">
           <Image
-            src={project.thumbnail}
+            src={getSafeImageUrl(project.thumbnail)}
             alt={project.title}
             fill
             priority
             className="object-cover"
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              target.src = fallbackImage;
+            }}
           />
         </div>
 

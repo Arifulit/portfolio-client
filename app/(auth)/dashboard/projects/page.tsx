@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface Project {
   id: string;
@@ -22,7 +23,21 @@ export default function ManageProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [failedImages, setFailedImages] = useState<Set<string>>(new Set());
   const router = useRouter();
+
+  // Helper function to check if URL is from problematic domain
+  const isProblematicDomain = (url: string) => {
+    return url.includes('cdn.pixabay.com') || url.includes('images.pexels.com');
+  };
+
+  // Helper function to get safe image URL
+  const getSafeImageUrl = (thumbnail: string, projectId: string) => {
+    if (failedImages.has(projectId) || isProblematicDomain(thumbnail)) {
+      return 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=300&fit=crop&auto=format';
+    }
+    return thumbnail || 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=300&fit=crop&auto=format';
+  };
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -146,15 +161,17 @@ export default function ManageProjectsPage() {
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {projects.map((project) => (
             <div key={project.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-              {project.thumbnail && (
-                <div className="h-48 overflow-hidden">
-                  <img 
-                    src={project.thumbnail} 
-                    alt={project.title}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              )}
+              <div className="h-48 overflow-hidden relative">
+                <Image
+                  src={getSafeImageUrl(project.thumbnail, project.id)}
+                  alt={project.title}
+                  fill
+                  className="object-cover"
+                  onError={() => {
+                    setFailedImages(prev => new Set([...prev, project.id]));
+                  }}
+                />
+              </div>
               <div className="p-6">
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">{project.title}</h3>
                 <p className="text-gray-600 mb-4 line-clamp-2">{project.description}</p>
