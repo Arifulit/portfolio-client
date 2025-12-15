@@ -3,9 +3,10 @@
 A modern, responsive portfolio website built with Next.js 14, TypeScript, and Tailwind CSS.
 
 ## 🌐 Live Demo
+👉 **[View Full Project Documentation](https://drive.google.com/file/d/1G1iu1fk8aAqaHfTqf2trEB3WtdNMbBsE/view?usp=sharing)**
 
-- **Frontend**: [Your Vercel URL]
-- **Backend API**: [Your Backend URL]
+- **Frontend Repository**: [https://github.com/Arifulit/portfolio-client]
+- **Backend Repository**: [https://github.com/Arifulit/portfolio-server]
 
 ## ✨ Features
 
