@@ -1,16 +1,34 @@
-# Portfolio Website - Frontend
+# 🚀 Portfolio Website – Frontend
 
-A modern, responsive portfolio website built with Next.js 14, TypeScript, and Tailwind CSS.
+A modern, fully responsive portfolio website built using **Next.js 14**, **TypeScript**, and **Tailwind CSS**.  
+This project showcases professional web development practices, clean UI design, and performance-optimized architecture.
+
+---
 
 ## 🎥 Project Demo Video
 👉 **[Watch Demo Video](https://drive.google.com/file/d/1G1iu1fk8aAqaHfTqf2trEB3WtdNMbBsE/preview)**
 
+---
 
-## 🌐 Live Demo
+## 🌐 Live Deployment
 
+- **Frontend (Vercel)**:  
+  👉 https://portfolio-client-phi-ten.vercel.app/
 
-- **Frontend Repository**: [https://github.com/Arifulit/portfolio-client]
-- **Backend Repository**: [https://github.com/Arifulit/portfolio-server]
+- **Backend (Vercel)**:  
+  👉 https://portfolio-server-blond-zeta.vercel.app/
+
+---
+
+## 💻 Source Code Repositories
+
+- **Frontend Repository**:  
+  👉 https://github.com/Arifulit/portfolio-client
+
+- **Backend Repository**:  
+  👉 https://github.com/Arifulit/portfolio-server
+
+---
 
 ## ✨ Features
 
