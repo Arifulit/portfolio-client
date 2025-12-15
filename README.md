@@ -1,34 +1,37 @@
 # 🚀 Portfolio Website – Frontend
 
-A modern, fully responsive portfolio website built using **Next.js 14**, **TypeScript**, and **Tailwind CSS**.  
-This project showcases professional web development practices, clean UI design, and performance-optimized architecture.
+A modern, fully responsive portfolio website built using **Next.js 14**, **TypeScript**, and **Tailwind CSS**.
 
 ---
 
 ## 🎥 Project Demo Video
-👉 **[Watch Demo Video](https://drive.google.com/file/d/1G1iu1fk8aAqaHfTqf2trEB3WtdNMbBsE/preview)**
+👉 <a href="https://drive.google.com/file/d/1G1iu1fk8aAqaHfTqf2trEB3WtdNMbBsE/preview" target="_blank" rel="noopener noreferrer">
+Watch Demo Video
+</a>
 
 ---
 
 ## 🌐 Live Deployment
 
-- **Frontend (Vercel)**:  
-  👉 https://portfolio-client-phi-ten.vercel.app/
+- <a href="https://portfolio-client-phi-ten.vercel.app/" target="_blank" rel="noopener noreferrer">
+Frontend Live (Vercel)
+</a>
 
-- **Backend (Vercel)**:  
-  👉 https://portfolio-server-blond-zeta.vercel.app/
+- <a href="https://portfolio-server-blond-zeta.vercel.app/" target="_blank" rel="noopener noreferrer">
+Backend Live (Vercel)
+</a>
 
 ---
 
 ## 💻 Source Code Repositories
 
-- **Frontend Repository**:  
-  👉 https://github.com/Arifulit/portfolio-client
+- <a href="https://github.com/Arifulit/portfolio-client" target="_blank" rel="noopener noreferrer">
+Frontend Repository
+</a>
 
-- **Backend Repository**:  
-  👉 https://github.com/Arifulit/portfolio-server
-
----
+- <a href="https://github.com/Arifulit/portfolio-server" target="_blank" rel="noopener noreferrer">
+Backend Repository
+</a>
 
 ## ✨ Features
 
