@@ -74,10 +74,6 @@ export default async function ProjectDetailsPage({
             fill
             priority
             className="object-cover"
-            onError={(e) => {
-              const target = e.target as HTMLImageElement;
-              target.src = fallbackImage;
-            }}
           />
         </div>
 
