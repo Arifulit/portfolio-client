@@ -242,12 +242,6 @@ npm run test:e2e
 
 This project is licensed under the MIT License.
 
-## 👤 Author
-
-**Your Name**
-- GitHub: [@yourusername]
-- Email: your.email@example.com
-
 ## 🙏 Acknowledgments
 
 - Next.js Team
