@@ -38,8 +38,8 @@ export interface Blog {
   title: string;
   slug: string;
   content: string;
-  excerpt?: string;
-  featuredImage?: string;
+  description?: string;
+  image?: string;
   tags?: string[];
   published: boolean;
   authorId: string;
@@ -52,8 +52,8 @@ export interface Blog {
 export interface BlogFormData {
   title: string;
   content: string;
-  excerpt?: string;
-  featuredImage?: string;
+  description?: string;
+  image?: string;
   tags?: string[];
   published: boolean;
 }

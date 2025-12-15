@@ -25,8 +25,8 @@ export default function EditBlogPage({ params }: { params: { id: string } }) {
   const [formData, setFormData] = useState<BlogFormData>({
     title: '',
     content: '',
-    excerpt: '',
-    featuredImage: '',
+    description: '',
+    image: '',
     tags: [],
     published: false,
   });
@@ -49,12 +49,12 @@ export default function EditBlogPage({ params }: { params: { id: string } }) {
       setFormData({
         title: blogData.title || '',
         content: blogData.content || '',
-        excerpt: blogData.excerpt || '',
-        featuredImage: blogData.featuredImage || '',
+        description: blogData.description || '',
+        image: blogData.image || '',
         tags: Array.isArray(blogData.tags) ? blogData.tags : [],
         published: blogData.published || false,
       });
-      setImagePreview(blogData.featuredImage || '');
+      setImagePreview(blogData.image || 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&h=400&fit=crop');
     } catch (err) {
       toast.error(handleApiError(err));
       router.push('/dashboard/blogs');
@@ -89,8 +89,8 @@ export default function EditBlogPage({ params }: { params: { id: string } }) {
     setFormData(prev => ({ ...prev, [name]: value }));
     setErrors(prev => ({ ...prev, [name]: undefined }));
     
-    // Update image preview when featuredImage changes
-    if (name === 'featuredImage') {
+    // Update image preview when image changes
+    if (name === 'image') {
       setImagePreview(value);
     }
   };
@@ -128,8 +128,8 @@ export default function EditBlogPage({ params }: { params: { id: string } }) {
       const payload = {
         title: formData.title,
         content: formData.content,
-        description: formData.excerpt,
-        image: formData.featuredImage,
+        description: formData.description,
+        image: formData.image,
         tags: formData.tags,
         published: formData.published,
       };
@@ -182,18 +182,18 @@ export default function EditBlogPage({ params }: { params: { id: string } }) {
             required
           />
 
-          {/* Excerpt */}
+          {/* Description */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Excerpt
+              Description
             </label>
             <Textarea
-              name="excerpt"
+              name="description"
               rows={3}
-              value={formData.excerpt}
+              value={formData.description}
               onChange={handleChange}
               className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:outline-none shadow-sm"
-              placeholder="Enter a brief excerpt for your blog post"
+              placeholder="Enter a brief description for your blog post"
             />
           </div>
 
@@ -222,13 +222,16 @@ export default function EditBlogPage({ params }: { params: { id: string } }) {
               Featured Image URL
             </label>
             <Textarea
-              name="featuredImage"
+              name="image"
               rows={2}
-              value={formData.featuredImage}
+              value={formData.image}
               onChange={handleChange}
               className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:outline-none shadow-sm mb-2"
-              placeholder="Paste the URL of your featured image"
+              placeholder="Enter image URL (e.g., https://images.unsplash.com/photo-...)"
             />
+            <p className="text-xs text-gray-500 mb-2">
+              Add a compelling image to make your blog post more engaging. Use high-quality images with at least 800x400 resolution.
+            </p>
             {imagePreview && (
               <div className="mt-2">
                 <p className="text-sm text-gray-500 mb-1">Image Preview:</p>

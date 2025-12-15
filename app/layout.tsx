@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import ClientLayout from './ClientLayout';
+import BodyWrapper from '../components/BodyWrapper';
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -35,10 +36,12 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#ffffff" />
       </head>
-      <body className="min-h-screen flex flex-col font-sans antialiased" style={{ backgroundColor: 'transparent' }}>
-        <ClientLayout>
-          {children}
-        </ClientLayout>
+      <body className="min-h-screen flex flex-col font-sans antialiased" style={{ backgroundColor: 'transparent' }} suppressHydrationWarning>
+        <BodyWrapper>
+          <ClientLayout>
+            {children}
+          </ClientLayout>
+        </BodyWrapper>
       </body>
     </html>
   );
