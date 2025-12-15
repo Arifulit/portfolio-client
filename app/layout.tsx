@@ -31,7 +31,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable}`} suppressHydrationWarning>
-      <body className="min-h-screen flex flex-col bg-background font-sans antialiased">
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#ffffff" />
+      </head>
+      <body className="min-h-screen flex flex-col font-sans antialiased" style={{ backgroundColor: 'transparent' }}>
         <ClientLayout>
           {children}
         </ClientLayout>
